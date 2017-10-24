@@ -10,7 +10,7 @@ ARG LANG=de_DE.UTF-8
 ARG TZ=Europe/Berlin
 
 #
-# Environment variables
+# Environment variabless
 #
 ENV LANG=$LANG
 
