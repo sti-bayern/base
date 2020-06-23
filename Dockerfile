@@ -1,43 +1,27 @@
-FROM scratch
+FROM alpine:edge
 
-LABEL maintainer="Günther Morhart"
+LABEL maintainer="Ayhan Akilli"
 
-#
-# Build variables
-#
-ARG ID=1000
 ARG LANG=de_DE.UTF-8
 ARG TZ=Europe/Berlin
 
-#
-# Environment variabless
-#
 ENV LANG=$LANG
+ENV MUSL_LOCPATH=/usr/share/i18n/locales/musl
 
-#
-# Setup
-#
-ADD rootfs.tar.xz /
+COPY bin/ /usr/local/bin/
 
-RUN addgroup -g $ID app && \
-    adduser -u $ID -G app -s /bin/ash -D app && \
-    mkdir \
-        /app \
-        /data \
-        /var/log/app && \
-    apk --no-cache add \
-        su-exec \
-        tini \
-        tzdata && \
-    cp /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone && \
-    apk del \
-        tzdata
+RUN apk add --no-cache \
+        ca-certificates \
+        s6 \
+        su-exec && \
+    app-dir && \
+    app-user && \
+    app-timezone "$TZ" && \
+    app-locale
 
-#
-# Command
-#
-COPY app-entry.sh /usr/local/bin/app-entry
+COPY init/ /init/
+COPY s6/ /s6/
 
-ENTRYPOINT ["tini", "--", "app-entry"]
-CMD ["ash"]
+ENTRYPOINT ["app-entry"]
+
+CMD []
