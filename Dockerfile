@@ -11,6 +11,7 @@ ENV MUSL_LOCPATH=/usr/share/i18n/locales/musl
 COPY bin/ /usr/local/bin/
 
 RUN apk add --no-cache \
+        curl \
         ca-certificates \
         s6 \
         su-exec && \
