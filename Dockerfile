@@ -12,6 +12,7 @@ COPY bin/ /usr/local/bin/
 
 RUN apk add --no-cache \
         curl \
+        postgresql-client \
         ca-certificates \
         s6 \
         su-exec && \
