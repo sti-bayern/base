@@ -15,6 +15,7 @@ RUN apk add --no-cache \
         postgresql-client \
         ca-certificates \
         s6 \
+        openssh \
         su-exec && \
     app-dir && \
     app-user && \
