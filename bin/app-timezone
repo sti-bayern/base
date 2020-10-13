@@ -2,13 +2,11 @@
 
 set -eux
 
-if [ -z "$1" ]; then
-    echo "ERROR: No timezone passed"
+if [ -z "$TZ" ]; then
+    echo "Error: TZ environment variable not set"
     exit 1
 fi
 
-apk add --no-cache --virtual .timezone-deps tzdata
-cp /usr/share/zoneinfo/$1 /etc/localtime
-echo "$1" > /etc/timezone
-rm -rf /etc/TZ || true
-apk del .timezone-deps
+unlink /etc/localtime || true
+ln -sf /usr/share/zoneinfo/$TZ /etc/localtime
+echo "$TZ" > /etc/timezone
