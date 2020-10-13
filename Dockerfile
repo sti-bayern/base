@@ -1,30 +1,21 @@
 FROM alpine:edge
+LABEL maintainer="Guenther Morhart"
 
-LABEL maintainer="Ayhan Akilli"
-
-ARG LANG=de_DE.UTF-8
-ARG TZ=Europe/Berlin
-
-ENV LANG=$LANG
+ENV LANG=de_DE.UTF-8
 ENV MUSL_LOCPATH=/usr/share/i18n/locales/musl
+ENV TZ=Europe/Berlin
 
 COPY bin/ /usr/local/bin/
-
-RUN apk add --no-cache \
-        curl \
-        postgresql-client \
+RUN echo 'https://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
+    apk add --no-cache \
         ca-certificates \
-        s6 \
-        openssh \
-        su-exec && \
+        su-exec \
+        tzdata && \
     app-dir && \
     app-user && \
-    app-timezone "$TZ" && \
+    app-timezone && \
     app-locale
-
 COPY init/ /init/
-COPY s6/ /s6/
 
 ENTRYPOINT ["app-entry"]
-
-CMD []
+CMD ["su-exec", "app", "sh"]
