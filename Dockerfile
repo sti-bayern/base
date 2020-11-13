@@ -9,6 +9,7 @@ COPY bin/ /usr/local/bin/
 RUN echo 'https://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
     apk add --no-cache \
         ca-certificates \
+	    curl \
         su-exec \
         tzdata && \
     app-dir && \
